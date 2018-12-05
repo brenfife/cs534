@@ -160,14 +160,16 @@ regions = regionprops(handles.im_cells, 'Area','MajorAxisLength','MinorAxisLengt
 threshold = max([regions.Area])*.01;
 to_remove = find([regions.Area] < threshold);
 regions(to_remove) = [];
+%disp(regions)
 for i = 1:length(regions)
     regions(i).Roundness = regions(i).MajorAxisLength/regions(i).MinorAxisLength;
 end
-idx = kmeans([regions.Roundness]',3);
+idx = kmeans([regions.Roundness]',3,'Start',[1;1.6;3]);
 unsplit = length(find(idx == 1));
 shmoo = length(find(idx == 2));
 dividing = length(find(idx == 3));
 
+disp([regions.Roundness])
 count_string = sprintf('Normal: %d, Shmoo: %d, Dividing: %d', unsplit, shmoo, dividing);
 set(handles.Counts,'String',count_string);
 
